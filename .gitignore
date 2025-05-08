@@ -1,0 +1,14 @@
+.venv
+.pylintrc
+Pipfile.lock
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.log
+*.coverage
+*.cover
+.env
