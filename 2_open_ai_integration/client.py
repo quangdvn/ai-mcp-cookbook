@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 from contextlib import AsyncExitStack
 from typing import Any, List, Optional
 
@@ -28,7 +29,7 @@ class MCPOpenAIClient:
     # Initialize session and client objects
     self.mcp_session: Optional[ClientSession] = None
     self.exit_stack = AsyncExitStack()
-    self.openai_client = AsyncOpenAI()
+    self.openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     self.model = model
     self.stdio: Optional[Any] = None
     self.write: Optional[Any] = None
@@ -153,14 +154,18 @@ class MCPOpenAIClient:
 async def main():
   """Main entry point for the client."""
   client = MCPOpenAIClient()
-  await client.connect_to_server("server.py")
+  try:
+    await client.connect_to_server("server.py")
 
-  # Example: Ask about company vacation policy
-  query = "What is our company's vacation policy?"
-  print(f"\nQuery: {query}")
+    # Example: Ask about company vacation policy
+    # query = "What is our company's vacation policy?"
+    query = "What is the weather in Paris?"
+    print(f"\nQuery: {query}")
 
-  response = await client.process_query(query)
-  print(f"\nResponse: {response}")
+    response = await client.process_query(query)
+    print(f"\nResponse: {response}")
+  finally:
+    await client.cleanup()
 
 
 if __name__ == "__main__":
